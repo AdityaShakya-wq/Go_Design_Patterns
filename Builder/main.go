@@ -1,82 +1,38 @@
 package main
 
-import "fmt"
-
-type quizAnswer struct {
-	answerId string
-	question string
-	answer   string
-	position int
-}
-
-type quizAnswerBuilder struct {
-	answerId string
-	question string
-	answer   string
-	position int
-}
-
-func newBuilder() quizAnswerBuilder {
-	return quizAnswerBuilder{}
-}
-
-func (q *quizAnswerBuilder) setAnswerId(answerId string) *quizAnswerBuilder {
-	q.answerId = answerId
-	return q
-}
-
-func (q *quizAnswerBuilder) setQuestion(question string) *quizAnswerBuilder {
-	q.question = question
-	return q
-}
-
-func (q *quizAnswerBuilder) setAnswer(answer string) *quizAnswerBuilder {
-	q.answer = answer
-	return q
-}
-
-func (q *quizAnswerBuilder) setPosition(position int) *quizAnswerBuilder {
-	q.position = position
-	return q
-}
-
-func (q *quizAnswerBuilder) build() quizAnswer {
-	return quizAnswer{
-		answerId: q.answerId,
-		question: q.question,
-		answer:   q.answer,
-		position: q.position,
-	}
-}
-
-type director struct {
-	builder quizAnswerBuilder
-}
-
-func newDirector(q quizAnswerBuilder) *director {
-	return &director{
-		builder: q,
-	}
-}
-
-func (d *director) buildQuizAnswer(answerId string, question string, answer string, position int) quizAnswer {
-	d.builder.setAnswerId(answerId)
-	d.builder.setQuestion(question)
-	d.builder.setAnswer(answer)
-	d.builder.setPosition(position)
-	return d.builder.build()
-}
+import (
+	"Go/Builder/models"
+	json2 "encoding/json"
+	"fmt"
+)
 
 func main() {
 	fmt.Println("Builder Pattern \n")
-	quiz := newBuilder()
-	quiz.setAnswerId("Id1").setQuestion("First question").setAnswer("answer 1").setPosition(1).build()
+	quizBuilder := models.NewBuilder()
+	quiz := quizBuilder.SetAnswerId("Id1").SetQuestion("First question").SetAnswer("answer 1").SetPosition(1).Build()
 	fmt.Printf("Built quiz %v", quiz)
-	fmt.Printf("Built quiz answer id %v", quiz.answerId)
+	fmt.Printf("Built quiz answer id %v", quiz.AnswerId())
 
-	quizBuilderV2 := newBuilder()
-	quizDirector := newDirector(quizBuilderV2)
-	quizV2 := quizDirector.buildQuizAnswer("Id2", "Second question", "answer 2", 2)
+	quizBuilderV2 := models.NewBuilder()
+	quizDirector := models.NewDirector(quizBuilderV2)
+	quizV2 := quizDirector.BuildQuizAnswer("Id2", "Second question", "answer 2", 2)
 
-	fmt.Printf("Built quiz with director %v", quizV2)
+	fmt.Printf("\nBuilt quiz v2 with director %v", quizV2)
+	fmt.Printf("\nBuilt quiz v2 Answer -> %s", quizV2.Answer())
+
+	quizV2 = quizV2.ToBuilder().SetAnswer("Edited Answer").Build()
+	fmt.Printf("\nBuilt quiz v2 Answer -> %s", quizV2.Answer())
+
+	inputJson := make(map[string]interface{})
+	inputJson["name"] = "first"
+	inputJson["grade"] = "fifth"
+	fmt.Printf("\nInput json %v", inputJson)
+	json, _ := json2.Marshal(inputJson)
+	fmt.Printf("\nJson %v", json)
+	fmt.Printf("\nJson String%v", string(json))
+
+	inputJson2 := "{\"name\":\"test\"}"
+	fmt.Printf("\nInput json2 %v", inputJson2)
+	json2_1, _ := json2.Marshal(inputJson2)
+	fmt.Printf("\nJson2 %v\n", json2_1)
 }
