@@ -1,15 +1,15 @@
 package registry
 
 import (
-	"ProtoTypeDesignPattern/service"
+	service2 "ProtoTypeDesignPattern/internal/service"
 )
 
-var RegistryList = make(map[int]service.Shape)
+var RegistryList = make(map[int]service2.Shape)
 
 func LoadRegistry() {
-	circle := service.NewCircle(2, 3, 4)
+	circle := service2.NewCircle(2, 3, 4)
 	RegistryList[int(circle.GetId())] = circle
 
-	square := service.NewSquare(3, 4)
+	square := service2.NewSquare(3, 4)
 	RegistryList[int(square.GetId())] = square
 }

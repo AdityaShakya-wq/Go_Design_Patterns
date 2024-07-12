@@ -1,7 +1,7 @@
 package service
 
 import (
-	"ProtoTypeDesignPattern/models"
+	"ProtoTypeDesignPattern/internal/models"
 	"fmt"
 )
 

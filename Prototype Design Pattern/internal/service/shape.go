@@ -1,6 +1,8 @@
 package service
 
-import "ProtoTypeDesignPattern/models"
+import (
+	"ProtoTypeDesignPattern/internal/models"
+)
 
 type Shape interface {
 	GetId() models.ShapeType //get id
